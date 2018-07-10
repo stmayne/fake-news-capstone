@@ -25,13 +25,14 @@ def getBsType(domain):
 
     data = json.load(object.get()['Body'])
 
-    #return type if found from the bs data
+    #return types if found from the bs data
     try:
-        type = data[domain]['type']
+        domain_data = data[domain]
+        type = [domain_data['type'], domain_data['2nd type'], domain_data['3rd type']]
     except:
-        type = ""
-    finally:
-        return type
+        type = ['','','']
+
+    return type
 
 #function to get data from the webhose.io apitoken
 #currently takes domain name and returns domain rank, lots of other options available
