@@ -37,24 +37,29 @@ def getBsType(domain):
 #currently takes domain name and returns domain rank, lots of other options available
 def getWebHoseData(domain):
     #must include your api token here
-    apitoken = '<Private API Token Here>'
+    #TODO apitoken =  <Put API token here>
+
     #how many threads you want back, currently only doing site level params so only need one thread
     sizeofresponse = '1'
-    requeststring = 'http://webhose.io/filterWebContent?token=%s&format=json&size=%s&q=site:%s' % (apitoken, sizeofresponse, domain)
-
+    try:
+        requeststring = 'http://webhose.io/filterWebContent?token=%s&size=%s&format=json&q=site:%s' % (apitoken, sizeofresponse, domain)
+    except:
+        print('Exception occured when requesting from webhose.io, check domain name')
+        return '0'
     #get json from webhose.io api
     try:
         response = requests.get(requeststring)
         data = response.json()
-    except:
-        print('Exception occured when requesting from webhose.io, check domain name')
-    finally:
         #webhose.io returns a dictionary of lists of dictionaries
         return data['posts'][0]['thread']['domain_rank']
+    except:
+        print('Exception occured when parsing data, check domain name')
+        return '0'
+
 
 if __name__ == "__main__":
     #domain = parseUrl(str(sys.argv[1]))
     #bstype = getBsType(domain)
     #domain = parseUrl('https://www.nytimes.com/2018/07/02/nyregion/michael-cohen-trump.html?rref=collection%2Fsectioncollection%2Fpolitics&action=click&contentCollection=politics&region=stream&module=stream_unit&version=latest&contentPlacement=2&pgtype=sectionfront')
     #print(bstype)
-    print(getWebHoseData('nytimes.com'))
+    print(getWebHoseData('cnn.com'))
